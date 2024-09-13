@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 void main() {
   runApp(MaterialApp(
@@ -6,7 +7,8 @@ void main() {
     home: Scaffold(
       backgroundColor: Colors.pink,
       appBar: AppBar(
-        backgroundColor: Colors.pink,
+        backgroundColor: Colors.pink[700],
+        elevation: 100.0,
         title: Text('Dice'),
       ),
       body: DiceApp(),
@@ -14,28 +16,65 @@ void main() {
   ));
 }
 
-class DiceApp extends StatelessWidget {
+class DiceApp extends StatefulWidget {
+  const DiceApp({super.key});
+
+  @override
+  State<DiceApp> createState() => _DiceAppState();
+}
+
+class _DiceAppState extends State<DiceApp> {
+
+  var random = Random();
+  var leftImageNumber = 1;
+  var rightImageNumber = 3;
+
+  void changeDice() {
+    setState(() {
+      rightImageNumber = random.nextInt(6) + 1;
+      leftImageNumber = random.nextInt(6) + 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Row(children: <Widget>[
-      Expanded(
-          child: TextButton(
-            onPressed: () {
-              print('left button got pressed');
-            },
-            child: Padding(
-                padding: EdgeInsets.all(15.0),
-                child: Image.asset('images/dice3.png')),
-          )),
-      Expanded(
-          child: TextButton(
-            onPressed: () {
-              print('right button got pressed');
-            },
-            child: Padding(
-                padding: EdgeInsets.all(15.0),
-                child: Image.asset('images/dice3.png')),
-          )),
-    ]);
+    return Center(
+      child: Row(children: <Widget>[
+        Expanded(
+            child: TextButton(
+              onPressed: () {
+                changeDice();
+              },
+              child: Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Image.asset('images/dice$leftImageNumber.png')),
+            )),
+        Expanded(
+            child: TextButton(
+              onPressed: () {
+                changeDice();
+              },
+              child: Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Image.asset('images/dice$rightImageNumber.png')),
+            )),
+      ]),
+    );
   }
+// ///[bad way to use]
+// Widget customText(String text){
+//   return Text(text);
+// }
 }
+
+
+// ///[good way to use]
+// class _CustomText extends StatelessWidget {
+//   final String text;
+//   const _CustomText({super.key,required this.text});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Text(text);
+//   }
+// }
